@@ -1,11 +1,15 @@
 // src/App.tsx
 
+import { useEffect, useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import { useState } from 'react';
 import OpenAI from 'openai';
 import logo from './assets/logo.png';
 
 function App() {
+  useEffect(() => {
+    document.title = "SFL Insights";
+  }, []);
+
   return (
     <div style={{ padding: '2rem' }}>
       <header style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
@@ -15,14 +19,14 @@ function App() {
 
       <nav style={{ marginBottom: '2rem' }}>
         <Link to="/" style={{ marginRight: '1rem' }}>Home</Link>
-        <Link to="/about" style={{ marginRight: '1rem' }}>About</Link>
+        <Link to="/analysis-systems" style={{ marginRight: '1rem' }}>Analysis Systems</Link>
         <Link to="/image-analysis" style={{ marginRight: '1rem' }}>Image Tool</Link>
         <Link to="/text-analysis">Text Tool</Link>
       </nav>
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/analysis-systems" element={<AnalysisSystems />} />
         <Route path="/image-analysis" element={<ImageTool />} />
         <Route path="/text-analysis" element={<TextTool />} />
       </Routes>
@@ -34,49 +38,30 @@ function Home() {
   return (
     <div style={{ padding: '1rem', lineHeight: '1.6' }}>
       <h1>Welcome to SFL Insights</h1>
-      <p>
-        Welcome to SFL Insights, your gateway to powerful text and image analysis tools grounded in the principles of Systemic Functional Linguistics (SFL). Whether you're a student, researcher, or linguist, our tools are designed to support deep and structured analyses of meaning in both language and visuals.
-      </p>
-
-      <h2>📘 SFL Text Analysis Tool</h2>
-      <p>
-        This tool performs comprehensive linguistic analysis based on the SFL framework established by Halliday and Matthiessen (2014) and enriched by the Appraisal theory from Martin and White (2005). It examines your text through:
-      </p>
+      <p>Welcome to SFL Insights, your gateway to powerful text and image analysis tools grounded in the principles of Systemic Functional Linguistics (SFL)...</p>
+      <h2>\ud83d\udcd8 SFL Text Analysis Tool</h2>
       <ul>
         <li>Ideational Metafunction (experiential and logical meanings)</li>
         <li>Interpersonal Metafunction (mood, modality, appraisal)</li>
         <li>Textual Metafunction (theme/rheme, cohesion, nominalization, and more)</li>
       </ul>
-      <p>
-        Each analysis provides rich linguistic tagging and detailed commentary to help you understand how language constructs meaning.
-      </p>
-
-      <h2>🖼️ SFL Image Analysis Tool</h2>
-      <p>
-        Based on the visual grammar framework of Kress and van Leeuwen (2001), this tool allows you to analyze the meaning-making structures in images. It explores:
-      </p>
+      <h2>\ud83d\uddbc\ufe0f SFL Image Analysis Tool</h2>
       <ul>
         <li>Representational meanings (narrative and conceptual structures)</li>
         <li>Interpersonal meanings (gaze, size, angle, and social distance)</li>
         <li>Compositional meanings (information value, salience, and framing)</li>
       </ul>
-      <p>
-        This tool supports educators, designers, and researchers in uncovering the communicative functions embedded in visuals.
-      </p>
-
-      <h3>🔒 Your Privacy Matters</h3>
-      <p>
-        Kindly note that none of the submitted texts or images are stored or saved. All analyses are processed securely and anonymously to protect your privacy.
-      </p>
+      <h3>\ud83d\udd12 Your Privacy Matters</h3>
+      <p>Kindly note that none of the submitted texts or images are stored or saved...</p>
     </div>
   );
 }
 
-function About() {
+function AnalysisSystems() {
   return (
     <div>
-      <h2>About SFL</h2>
-      <p>SFL (Systemic Functional Linguistics) is a theory of language developed by Halliday. More content coming soon.</p>
+      <h2>Analysis Systems</h2>
+      <p>SFL (Systemic Functional Linguistics) is a theory of language developed by Halliday...</p>
     </div>
   );
 }
@@ -98,9 +83,7 @@ function ImageTool() {
 
   async function handleSubmit() {
     if (!image) return alert('Please upload an image first.');
-
     setLoading(true);
-
     const reader = new FileReader();
     reader.readAsDataURL(image);
     reader.onloadend = async () => {
@@ -111,7 +94,6 @@ function ImageTool() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ imageBase64: base64 }),
         });
-
         const data = await response.json();
         setAnalysis(data.analysis);
       } catch {
@@ -127,7 +109,6 @@ function ImageTool() {
       <h2>Image Analysis Tool</h2>
       <input type="file" accept="image/*" onChange={handleFileChange} />
       {preview && <img src={preview} alt="Preview" style={{ maxWidth: '300px', marginTop: '1rem' }} />}
-      <br />
       <button onClick={handleSubmit} style={{ marginTop: '1rem' }}>Analyze Image</button>
       {loading && <p>Analyzing...</p>}
       {analysis && (
@@ -147,22 +128,18 @@ function TextTool() {
 
   async function handleSubmit() {
     if (!input.trim()) return alert('Please enter some text.');
-
     setLoading(true);
     try {
       const openai = new OpenAI({
         apiKey: 'sk-REPLACE_ME',
         dangerouslyAllowBrowser: true,
       });
-
       const prompt = `You are an expert in Systemic Functional Linguistics (SFL)...\nText:\n\"\"\"${input}\"\"\"`;
-
       const res = await openai.chat.completions.create({
         model: 'gpt-4o',
         messages: [{ role: 'user', content: prompt }],
         max_tokens: 3000,
       });
-
       const result = res.choices?.[0]?.message?.content || '';
       const parts = result.split(/##\s+/).filter(Boolean).map(p => p.trim());
       setAnalysis(parts);
@@ -184,7 +161,6 @@ function TextTool() {
         placeholder="Paste or type your text here..."
         style={{ marginTop: '1rem' }}
       />
-      <br />
       <button onClick={handleSubmit} style={{ marginTop: '1rem' }}>Analyze Text</button>
       {loading && <p>Analyzing...</p>}
       {analysis.length > 0 && (
