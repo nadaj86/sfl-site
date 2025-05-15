@@ -1,0 +1,206 @@
+import logo from './assets/logo.png';
+import OpenAI from 'openai';
+import { Routes, Route, Link } from 'react-router-dom';
+import { useState } from 'react';
+
+function App() {
+  return (
+    <div style={{ padding: '2rem' }}>
+      <header style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
+        <img src={logo} alt="Logo" style={{ height: '50px', marginRight: '1rem' }} />
+        <h1 style={{ margin: 0, fontSize: '1.5rem' }}>by Nada AlJamal</h1>
+      </header>
+
+      <nav style={{ marginBottom: '2rem' }}>
+        <Link to="/" style={{ marginRight: '1rem' }}>Home</Link>
+        <Link to="/about" style={{ marginRight: '1rem' }}>About</Link>
+        <Link to="/image-analysis" style={{ marginRight: '1rem' }}>Image Tool</Link>
+        <Link to="/text-analysis">Text Tool</Link>
+      </nav>
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/image-analysis" element={<ImageTool />} />
+        <Route path="/text-analysis" element={<TextTool />} />
+      </Routes>
+    </div>
+  );
+}
+
+function Home() {
+  return (
+    <div>
+      <h1>Welcome to the SFL Analysis Hub</h1>
+      <p>This site provides tools and info for analyzing images and texts using Systemic Functional Linguistics.</p>
+    </div>
+  );
+}
+
+function About() {
+  return (
+    <div>
+      <h2>About SFL</h2>
+      <p>SFL (Systemic Functional Linguistics) is a theory of language developed by Halliday. More content coming soon.</p>
+    </div>
+  );
+}
+
+function ImageTool() {
+  const [image, setImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [analysis, setAnalysis] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+      setAnalysis(null);
+    }
+  }
+
+  async function handleSubmit() {
+    if (!image) {
+      alert('Please upload an image first.');
+      return;
+    }
+
+    setLoading(true);
+
+    const reader = new FileReader();
+    reader.readAsDataURL(image);
+    reader.onloadend = async () => {
+      const base64 = reader.result?.toString().split(',')[1];
+      try {
+        const response = await fetch('/.netlify/functions/analyzeImage', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ imageBase64: base64 }),
+        });
+
+        const data = await response.json();
+        setAnalysis(data.analysis);
+      } catch (err) {
+        alert('Something went wrong');
+      } finally {
+        setLoading(false);
+      }
+    };
+  }
+
+  return (
+    <div>
+      <h2>Image Analysis Tool</h2>
+      <input type="file" accept="image/*" onChange={handleFileChange} />
+      {preview && <img src={preview} alt="Preview" style={{ maxWidth: '300px', marginTop: '1rem' }} />}
+      <br />
+      <button onClick={handleSubmit} style={{ marginTop: '1rem' }}>
+        Analyze Image
+      </button>
+      {loading && <p>Analyzing...</p>}
+      {analysis && (
+        <div style={{ marginTop: '1rem' }}>
+          <h3>Analysis Result:</h3>
+          <pre style={{ whiteSpace: 'pre-wrap' }}>{analysis}</pre>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TextTool() {
+  const [input, setInput] = useState('');
+  const [analysis, setAnalysis] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit() {
+    if (!input.trim()) {
+      alert('Please enter some text.');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const openai = new OpenAI({
+        apiKey: 'sk-REPLACE_ME', // Replace with your actual key for local dev
+        dangerouslyAllowBrowser: true,
+      });
+
+      const prompt = `
+You are an expert in Systemic Functional Linguistics (SFL). Analyze the following text using Halliday’s framework. Your output must include these sections, each with tables and ~300 word commentary:
+
+1. Ideational Metafunction
+2. Interpersonal Metafunction
+3. Textual Metafunction
+4. Register Analysis
+
+Use markdown headings (##) and tables. Output should be well formatted and detailed.
+
+Text:
+"""${input}"""
+`;
+
+      const res = await openai.chat.completions.create({
+        model: 'gpt-4o',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 3000,
+      });
+
+      const result = res.choices?.[0]?.message?.content || '';
+      const parts = result.split(/##\s+/).filter(Boolean).map((p) => p.trim());
+      setAnalysis(parts);
+    } catch (err) {
+      console.error('❌ GPT error:', err);
+      alert('Something went wrong (GPT request failed)');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div>
+      <h2>Text Analysis Tool</h2>
+      <textarea
+        rows={8}
+        cols={70}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Paste or type your text here..."
+        style={{ marginTop: '1rem' }}
+      />
+      <br />
+      <button onClick={handleSubmit} style={{ marginTop: '1rem' }}>
+        Analyze Text
+      </button>
+
+      {loading && <p>Analyzing...</p>}
+
+      {analysis.length > 0 && (
+        <div style={{ marginTop: '2rem' }}>
+          <h3>Analysis Summary</h3>
+          <ul>
+            {analysis.map((part, idx) => {
+              const title = part.split('\n')[0].trim();
+              return <li key={idx}><a href={`#part-${idx}`}>{title}</a></li>;
+            })}
+          </ul>
+
+          {analysis.map((part, idx) => {
+            const title = part.split('\n')[0].trim();
+            return (
+              <details key={idx} style={{ marginTop: '1rem', padding: '1rem', border: '1px solid #ccc', borderRadius: '0.5rem' }}>
+                <summary style={{ cursor: 'pointer', fontWeight: 'bold' }} id={`part-${idx}`}>{title}</summary>
+                <div style={{ whiteSpace: 'pre-wrap', marginTop: '1rem' }}>{part}</div>
+              </details>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default App;
