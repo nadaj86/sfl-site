@@ -1,93 +1,123 @@
 // src/pages/TextFramework.tsx
 
-import { Link } from 'react-router-dom';
+import React from 'react';
 
-export default function TextFramework() {
+function TextFramework() {
   return (
-    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto', lineHeight: '1.8' }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>SFL Text Analysis Framework</h1>
-      
-      <p>
-        Systemic Functional Linguistics (SFL) views language as a social semiotic system that
-        simultaneously fulfills three metafunctions: ideational, interpersonal, and textual.
-        This analytical model is essential in understanding not only what is being communicated,
-        but also how and why.
-      </p>
+    <div style={{ padding: '2rem', lineHeight: 1.6 }}>
+      <h1>SFL Text Analysis Framework</h1>
 
-      <h2>1. Ideational Metafunction</h2>
-      <p>
-        Constructs the content of experience: inner world of consciousness and outer world of
-        events and relationships.
-      </p>
-
-      <h3>1.1 Logical Metafunction</h3>
+      <p><strong>Systemic Functional Linguistics (SFL)</strong> conceptualizes language as a resource for meaning-making, where all language simultaneously performs three metafunctions:</p>
       <ul>
-        <li><b>Parataxis:</b> Equal-status clauses (e.g., “She laughed and he cried”)</li>
-        <li><b>Hypotaxis:</b> Main clause with dependents (e.g., “She laughed because he cried”)</li>
-        <li><b>Logico-Semantic:</b> Elaboration, Extension, Enhancement, Projection</li>
+        <li><strong>Ideational:</strong> representing the world</li>
+        <li><strong>Interpersonal:</strong> enacting relationships</li>
+        <li><strong>Textual:</strong> organizing messages in context</li>
       </ul>
 
-      <h3>1.2 Experiential Metafunction</h3>
+      <h2>1. IDEATIONAL METAFUNCTION</h2>
+      <p>This metafunction is concerned with the representation of experience—external (physical), internal (mental), and logical (connections between experiences).</p>
+
+      <h3>1.1. Logical Metafunction</h3>
+      <p>Deals with clause complexing—how clauses combine to construct logical meaning.</p>
       <ul>
-        <li><b>Process Types:</b> Material, Mental, Relational, Verbal, Behavioral, Existential</li>
-        <li><b>Circumstances:</b> Location, Manner, Cause, Accompaniment, Matter, Role</li>
+        <li><strong>Parataxis:</strong> Coordination (e.g., "She came, and he stayed.")</li>
+        <li><strong>Hypotaxis:</strong> Subordination (e.g., "Although she came, he stayed.")</li>
       </ul>
 
-      <h2>2. Interpersonal Metafunction</h2>
-      <p>
-        Enables speakers/writers to interact, negotiate, and position socially.
-      </p>
-
-      <h3>2.1 Mood System</h3>
+      <h4>Logico-Semantic Relations</h4>
       <ul>
-        <li>Declarative</li>
-        <li>Interrogative</li>
-        <li>Imperative</li>
+        <li><strong>Elaboration:</strong> "He resigned — that is, he left without notice."</li>
+        <li><strong>Extension:</strong> "She smiled and waved."</li>
+        <li><strong>Enhancement:</strong> "She studied because she wanted to pass."</li>
+        <li><strong>Projection:</strong> "She said that she was tired."</li>
       </ul>
 
-      <h3>2.2 Modality</h3>
+      <h3>1.2. Experiential Metafunction</h3>
+      <p>Construes experience through the transitivity system: processes, participants, and circumstances.</p>
+
+      <h4>Process Types</h4>
       <ul>
-        <li>Epistemic (e.g. might, must)</li>
-        <li>Deontic (e.g. should, may)</li>
-        <li>Dynamic (e.g. can, will)</li>
+        <li><strong>Material:</strong> She built a house.</li>
+        <li><strong>Mental:</strong> He feared the truth.</li>
+        <li><strong>Relational:</strong> Einstein was a genius.</li>
+        <li><strong>Verbal:</strong> She said hello.</li>
+        <li><strong>Behavioral:</strong> She sighed.</li>
+        <li><strong>Existential:</strong> There is a problem.</li>
       </ul>
 
-      <h3>2.3 Appraisal System</h3>
+      <h4>Participants</h4>
+      <p>Examples: Actor, Goal, Senser, Carrier, Sayer, Behaver, Existent, etc.</p>
+
+      <h4>Circumstances</h4>
       <ul>
-        <li>Attitude</li>
-        <li>Engagement</li>
-        <li>Graduation</li>
+        <li><strong>Location:</strong> At home, Yesterday</li>
+        <li><strong>Cause:</strong> Because of the rain</li>
+        <li><strong>Manner:</strong> With precision</li>
+        <li>...and others like Role, Extent, Angle, Matter</li>
       </ul>
 
-      <h2>3. Textual Metafunction</h2>
-      <p>
-        Organizes language for coherence and cohesion.
-      </p>
+      <h2>2. INTERPERSONAL METAFUNCTION</h2>
 
-      <h3>3.1 Theme and Rheme</h3>
+      <h3>2.1. Mood</h3>
       <ul>
-        <li>Theme: starting point</li>
-        <li>Rheme: message development</li>
-        <li>Thematic progression</li>
+        <li><strong>Declarative:</strong> He is coming.</li>
+        <li><strong>Interrogative:</strong> Is he coming?</li>
+        <li><strong>Imperative:</strong> Come here!</li>
       </ul>
 
-      <h3>3.2 Cohesion</h3>
+      <h3>2.2. Modality</h3>
       <ul>
-        <li>Reference, Substitution, Ellipsis</li>
+        <li><strong>Epistemic:</strong> might, probably</li>
+        <li><strong>Deontic:</strong> must, should</li>
+        <li><strong>Dynamic:</strong> can, able to</li>
+      </ul>
+
+      <h3>2.3. Pronouns</h3>
+      <p>First/Second/Third person; Inclusive vs Exclusive "we"</p>
+
+      <h3>2.4. Appraisal (Martin & White)</h3>
+      <ul>
+        <li><strong>Affect:</strong> She was thrilled.</li>
+        <li><strong>Judgment:</strong> He is dishonest.</li>
+        <li><strong>Appreciation:</strong> A well-written article.</li>
+      </ul>
+
+      <h3>2.5. Reader Positioning</h3>
+      <p>Writers use stance and voice to align readers.</p>
+
+      <h2>3. TEXTUAL METAFUNCTION</h2>
+
+      <h3>3.1. Theme & Rheme</h3>
+      <p><strong>Theme:</strong> Point of departure<br /><strong>Rheme:</strong> What's being said about it</p>
+
+      <h3>3.2. Thematic Progression</h3>
+      <ul>
+        <li><strong>Constant:</strong> Same theme repeated</li>
+        <li><strong>Linear:</strong> Rheme becomes next theme</li>
+        <li><strong>Split:</strong> Rheme splits into two themes</li>
+      </ul>
+
+      <h3>3.3. Cohesion</h3>
+      <ul>
+        <li>Reference</li>
+        <li>Substitution</li>
+        <li>Ellipsis</li>
         <li>Conjunction</li>
         <li>Lexical cohesion</li>
       </ul>
 
-      <h2>4. Register</h2>
-      <ul>
-        <li><b>Field:</b> Subject matter</li>
-        <li><b>Tenor:</b> Social relationships</li>
-        <li><b>Mode:</b> Channel of communication</li>
-      </ul>
+      <h3>3.4. Coherence</h3>
+      <p>Genre, topic continuity, logical flow</p>
 
-      <p>
-        <Link to="/" style={{ color: '#4a4af5' }}>&larr; Back to Home</Link>
-      </p>
+      <h2>4. REGISTER</h2>
+      <p>Register is the context of situation:</p>
+      <ul>
+        <li><strong>Field:</strong> What’s happening?</li>
+        <li><strong>Tenor:</strong> Who’s involved?</li>
+        <li><strong>Mode:</strong> Spoken, written, reflective</li>
+      </ul>
     </div>
   );
 }
+
+export default TextFramework;
