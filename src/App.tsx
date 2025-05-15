@@ -1,7 +1,8 @@
 function App() {
   return (
     <div>
-      <h1>✅ This is the NEW SFL site deployed from GitHub!</h1>
+      <h1>🎉 Deployment test passed – from GitHub!</h1>
+      <p>This text confirms the live site is using your latest code.</p>
     </div>
   );
 }
