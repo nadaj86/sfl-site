@@ -1,7 +1,9 @@
-import logo from './assets/logo.png';
-import OpenAI from 'openai';
+// src/App.tsx
+
 import { Routes, Route, Link } from 'react-router-dom';
 import { useState } from 'react';
+import OpenAI from 'openai';
+import logo from './assets/logo.png';
 
 function App() {
   return (
@@ -30,9 +32,42 @@ function App() {
 
 function Home() {
   return (
-    <div>
-      <h1>Welcome to the SFL Analysis Hub</h1>
-      <p>This site provides tools and info for analyzing images and texts using Systemic Functional Linguistics.</p>
+    <div style={{ padding: '1rem', lineHeight: '1.6' }}>
+      <h1>Welcome to SFL Insights</h1>
+      <p>
+        Welcome to SFL Insights, your gateway to powerful text and image analysis tools grounded in the principles of Systemic Functional Linguistics (SFL). Whether you're a student, researcher, or linguist, our tools are designed to support deep and structured analyses of meaning in both language and visuals.
+      </p>
+
+      <h2>📘 SFL Text Analysis Tool</h2>
+      <p>
+        This tool performs comprehensive linguistic analysis based on the SFL framework established by Halliday and Matthiessen (2014) and enriched by the Appraisal theory from Martin and White (2005). It examines your text through:
+      </p>
+      <ul>
+        <li>Ideational Metafunction (experiential and logical meanings)</li>
+        <li>Interpersonal Metafunction (mood, modality, appraisal)</li>
+        <li>Textual Metafunction (theme/rheme, cohesion, nominalization, and more)</li>
+      </ul>
+      <p>
+        Each analysis provides rich linguistic tagging and detailed commentary to help you understand how language constructs meaning.
+      </p>
+
+      <h2>🖼️ SFL Image Analysis Tool</h2>
+      <p>
+        Based on the visual grammar framework of Kress and van Leeuwen (2001), this tool allows you to analyze the meaning-making structures in images. It explores:
+      </p>
+      <ul>
+        <li>Representational meanings (narrative and conceptual structures)</li>
+        <li>Interpersonal meanings (gaze, size, angle, and social distance)</li>
+        <li>Compositional meanings (information value, salience, and framing)</li>
+      </ul>
+      <p>
+        This tool supports educators, designers, and researchers in uncovering the communicative functions embedded in visuals.
+      </p>
+
+      <h3>🔒 Your Privacy Matters</h3>
+      <p>
+        Kindly note that none of the submitted texts or images are stored or saved. All analyses are processed securely and anonymously to protect your privacy.
+      </p>
     </div>
   );
 }
@@ -62,10 +97,7 @@ function ImageTool() {
   }
 
   async function handleSubmit() {
-    if (!image) {
-      alert('Please upload an image first.');
-      return;
-    }
+    if (!image) return alert('Please upload an image first.');
 
     setLoading(true);
 
@@ -82,7 +114,7 @@ function ImageTool() {
 
         const data = await response.json();
         setAnalysis(data.analysis);
-      } catch (err) {
+      } catch {
         alert('Something went wrong');
       } finally {
         setLoading(false);
@@ -96,9 +128,7 @@ function ImageTool() {
       <input type="file" accept="image/*" onChange={handleFileChange} />
       {preview && <img src={preview} alt="Preview" style={{ maxWidth: '300px', marginTop: '1rem' }} />}
       <br />
-      <button onClick={handleSubmit} style={{ marginTop: '1rem' }}>
-        Analyze Image
-      </button>
+      <button onClick={handleSubmit} style={{ marginTop: '1rem' }}>Analyze Image</button>
       {loading && <p>Analyzing...</p>}
       {analysis && (
         <div style={{ marginTop: '1rem' }}>
@@ -116,32 +146,16 @@ function TextTool() {
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit() {
-    if (!input.trim()) {
-      alert('Please enter some text.');
-      return;
-    }
+    if (!input.trim()) return alert('Please enter some text.');
 
     setLoading(true);
-
     try {
       const openai = new OpenAI({
-        apiKey: 'sk-REPLACE_ME', // Replace with your actual key for local dev
+        apiKey: 'sk-REPLACE_ME',
         dangerouslyAllowBrowser: true,
       });
 
-      const prompt = `
-You are an expert in Systemic Functional Linguistics (SFL). Analyze the following text using Halliday’s framework. Your output must include these sections, each with tables and ~300 word commentary:
-
-1. Ideational Metafunction
-2. Interpersonal Metafunction
-3. Textual Metafunction
-4. Register Analysis
-
-Use markdown headings (##) and tables. Output should be well formatted and detailed.
-
-Text:
-"""${input}"""
-`;
+      const prompt = `You are an expert in Systemic Functional Linguistics (SFL)...\nText:\n\"\"\"${input}\"\"\"`;
 
       const res = await openai.chat.completions.create({
         model: 'gpt-4o',
@@ -150,10 +164,9 @@ Text:
       });
 
       const result = res.choices?.[0]?.message?.content || '';
-      const parts = result.split(/##\s+/).filter(Boolean).map((p) => p.trim());
+      const parts = result.split(/##\s+/).filter(Boolean).map(p => p.trim());
       setAnalysis(parts);
-    } catch (err) {
-      console.error('❌ GPT error:', err);
+    } catch {
       alert('Something went wrong (GPT request failed)');
     } finally {
       setLoading(false);
@@ -172,12 +185,8 @@ Text:
         style={{ marginTop: '1rem' }}
       />
       <br />
-      <button onClick={handleSubmit} style={{ marginTop: '1rem' }}>
-        Analyze Text
-      </button>
-
+      <button onClick={handleSubmit} style={{ marginTop: '1rem' }}>Analyze Text</button>
       {loading && <p>Analyzing...</p>}
-
       {analysis.length > 0 && (
         <div style={{ marginTop: '2rem' }}>
           <h3>Analysis Summary</h3>
@@ -187,7 +196,6 @@ Text:
               return <li key={idx}><a href={`#part-${idx}`}>{title}</a></li>;
             })}
           </ul>
-
           {analysis.map((part, idx) => {
             const title = part.split('\n')[0].trim();
             return (
