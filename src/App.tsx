@@ -19,8 +19,8 @@ function App() {
 
       <nav style={{ marginBottom: '2rem' }}>
         <Link to="/" style={{ marginRight: '1rem' }}>Home</Link>
-        <Link to="/text-framework" style={{ marginRight: '1rem' }}>Text Framework</Link>
-        <Link to="/image-framework" style={{ marginRight: '1rem' }}>Image Framework</Link>
+        <Link to="/text-framework" style={{ marginRight: '1rem' }}>Text Analysis Framework</Link>
+        <Link to="/image-framework" style={{ marginRight: '1rem' }}>Image Analysis Framework</Link>
         <Link to="/image-analysis" style={{ marginRight: '1rem' }}>Image Tool</Link>
         <Link to="/text-analysis">Text Tool</Link>
       </nav>
