@@ -1,9 +1,11 @@
+// netlify/functions/analyzeText.ts
+
 import { Handler } from '@netlify/functions';
 import OpenAI from 'openai';
-import 'dotenv/config'; // <-- enables .env support for local dev
+import 'dotenv/config';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!, // correct way for Netlify functions
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 const handler: Handler = async (event) => {
@@ -18,15 +20,37 @@ const handler: Handler = async (event) => {
 
   try {
     const prompt = `
-You are an expert in Systemic Functional Linguistics (SFL). Analyze the following text using Halliday’s framework...
+You are an expert in Systemic Functional Linguistics (SFL). Analyze the following text using Halliday’s framework. Your output must be highly structured, academic, and thorough.
 
+### 1. Ideational Metafunction
+- Include Transitivity + Logical analysis
+- Markdown headings
+- Tables: Clause | Process Type | Participant | Circumstance
+- Commentary: 300+ words
+
+### 2. Interpersonal Metafunction
+- Mood, Modality, Pronouns, Appraisal
+- Tables + Frequency tables
+- Commentary: 300+ words
+
+### 3. Textual Metafunction
+- Theme/Rheme, Progression, Nominalization, Lexical Density, Cohesion
+- Tables
+- Commentary: 300+ words
+
+### 4. Register Analysis
+- Field, Tenor, Mode per clause
+- Register Summary Table
+- Commentary: 300+ words
+
+Use markdown headings ## for each section. Output must exceed 1000 words. Text:
 """${text}"""
 `;
 
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
-      max_tokens: 3000,
       messages: [{ role: 'user', content: prompt }],
+      max_tokens: 3000,
     });
 
     const aiText = response.choices[0]?.message?.content || 'No analysis generated.';
