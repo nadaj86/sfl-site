@@ -6,9 +6,7 @@ export default function TextFramework() {
   return (
     <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto', lineHeight: '1.8' }}>
       <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>SFL Text Analysis Framework</h1>
-      <p>
-      </p>
-
+      
       <p>
         Systemic Functional Linguistics (SFL) views language as a social semiotic system that
         simultaneously fulfills three metafunctions: ideational, interpersonal, and textual.
