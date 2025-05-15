@@ -7,7 +7,6 @@ export default function TextFramework() {
     <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto', lineHeight: '1.8' }}>
       <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>SFL Text Analysis Framework</h1>
       <p>
-        Understanding the Systemic Functional Linguistics Analysis Framework
       </p>
 
       <p>
