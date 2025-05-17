@@ -3,6 +3,17 @@ import React from 'react';
 export default function ImageFramework() {
   return (
     <div className="prose lg:prose-xl max-w-4xl mx-auto p-6">
+      <style>
+        {`
+          table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+          }
+          th, td {
+            padding: 8px;
+          }
+        `}
+      </style>
       <h1>Systemic Functional Linguistics Applied to Images</h1>
       <h2>Kress & van Leeuwen’s Visual Grammar Framework</h2>
       <p>
