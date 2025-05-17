@@ -8,6 +8,8 @@ const openai = new OpenAI({
 });
 
 const handler: Handler = async (event) => {
+  console.log('📥 EVENT BODY:', event.body?.slice(0, 100));
+
   const { imageBase64 } = JSON.parse(event.body || '{}');
 
   if (!imageBase64) {
@@ -17,26 +19,61 @@ const handler: Handler = async (event) => {
     };
   }
 
+  console.log('🖼 IMAGE LENGTH:', imageBase64.length);
+
   try {
     const prompt = `
-You are a multimodal SFL expert. Analyze this image using Kress & van Leeuwen's visual grammar framework.
+You are a multimodal SFL (Systemic Functional Linguistics) expert. Analyze this image using the full visual grammar framework of Kress & van Leeuwen, and deliver the findings as a detailed academic report.
 
-Describe:
-1. Ideational meanings (representation type, participants, vectors)
-2. Interpersonal meanings (gaze, angle, social distance)
-3. Compositional meanings (framing, salience, layout)
-4. Modality and possible cultural symbols
+The report must include the following structured sections:
 
-Be detailed and structured. Respond in markdown.
+1. **Ideational Meaning**
+   - Representation type (narrative, conceptual)
+   - Participants (actors, goals, carriers, etc.)
+   - Vectors and processes
 
-[IMAGE DATA: base64, JPG/PNG, assume visual content]
+2. **Interpersonal Meaning**
+   - Gaze (demand/offer)
+   - Social distance (intimate, personal, social, impersonal)
+   - Horizontal angle (involvement/detachment)
+   - Vertical angle (power dynamics)
+
+3. **Textual/Compositional Meaning**
+   - Information value (left/right, top/bottom)
+   - Salience (color, size, focus, etc.)
+   - Framing (connection/disconnection between elements)
+   - Layout and coherence
+
+4. **Modality**
+   - Realism indicators (color saturation, depth, representation style)
+   - Degree of naturalism and abstraction
+
+5. **Cultural and Symbolic Interpretation**
+   - Cultural signs, connotations, intertextual references
+   - Interpretative notes based on socio-cultural context
+
+6. **Conclusion**
+   - Summary of key communicative and semiotic functions
+   - Any implications for the intended audience or purpose
+
+Write in an academic tone using formal markdown structure with headings and subheadings.
 `;
 
     const response = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
-        { role: 'user', content: prompt },
-        { role: 'user', content: { image_url: { url: `data:image/jpeg;base64,${imageBase64}` }, type: 'image_url' } },
+        {
+          role: 'user',
+          content: [
+            { type: 'text', text: prompt },
+            {
+              type: 'image_url',
+              image_url: {
+                url: `data:image/jpeg;base64,${imageBase64}`,
+              },
+            },
+          ],
+        },
       ],
       max_tokens: 2000,
     });
@@ -47,10 +84,14 @@ Be detailed and structured. Respond in markdown.
       body: JSON.stringify({ analysis: result }),
     };
   } catch (error: any) {
-    console.error('❌ Error:', error.message);
+    console.error('❌ ERROR:', error);
     return {
       statusCode: 500,
-      body: 'Failed to analyze image.',
+      body: JSON.stringify({
+        error: true,
+        message: error?.message || 'Unknown error',
+        details: error?.response?.data || null,
+      }),
     };
   }
 };
