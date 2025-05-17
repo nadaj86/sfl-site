@@ -25,7 +25,7 @@ const handler: Handler = async (event) => {
     const prompt = `
 You are a multimodal SFL (Systemic Functional Linguistics) expert. Analyze this image using the full visual grammar framework of Kress & van Leeuwen, and deliver the findings as a detailed academic report.
 
-The report must include the following structured sections:
+The report must include the following structured sections. Each section should be no less than 200 words, and the writing must be analytical, detailed, and expressive:
 
 1. **Ideational Meaning**
    - Representation type (narrative, conceptual)
@@ -53,8 +53,10 @@ The report must include the following structured sections:
    - Interpretative notes based on socio-cultural context
 
 6. **Conclusion**
-   - Summary of key communicative and semiotic functions
-   - Any implications for the intended audience or purpose
+   - Provide extensive commentary on the overall meaning of the image
+   - Reflect on semiotic significance of the observed visual features
+   - Offer implications for intended audience, creator intent, or cultural framing
+   - Ensure this conclusion is expressive, reflective, and not less than 200 words
 
 Write in an academic tone using formal markdown structure with headings and subheadings.
 `;
