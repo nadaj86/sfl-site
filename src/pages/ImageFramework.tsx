@@ -127,7 +127,7 @@ export default function ImageFramework() {
 
       <h3>3.4 Reading Path and Layout</h3>
       <ul>
-        <li>Z-pattern or F-pattern (Western cultures)</li>
+        <li>Z-pattern or F-pattern</li>
         <li>Diagonal or circular layouts</li>
         <li>Zones used in magazines, web pages</li>
       </ul>
