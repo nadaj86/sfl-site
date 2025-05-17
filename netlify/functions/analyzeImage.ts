@@ -60,25 +60,26 @@ The report must include the following structured sections. Each section should b
 
 Write in an academic tone using formal markdown structure with headings and subheadings.
 `;
-
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [
+console.log('🧠 Using model:', 'gpt-4o');
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [
+    {
+      role: 'user',
+      content: [
+        { type: 'text', text: prompt },
         {
-          role: 'user',
-          content: [
-            { type: 'text', text: prompt },
-            {
-              type: 'image_url',
-              image_url: {
-                url: `data:image/jpeg;base64,${imageBase64}`,
-              },
-            },
-          ],
+          type: 'image_url',
+          image_url: {
+            url: `data:image/jpeg;base64,${imageBase64}`,
+          },
         },
       ],
-      max_tokens: 2000,
-    });
+    },
+  ],
+  max_tokens: 2000,
+});
+
 
     const result = response.choices?.[0]?.message?.content || 'No result.';
     return {
