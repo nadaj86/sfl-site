@@ -13,3 +13,10 @@
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
+
+[functions]
+  node_bundler = "esbuild"
+
+[functions.analyzeImage]
+  memory = 1024
+  timeout = 20

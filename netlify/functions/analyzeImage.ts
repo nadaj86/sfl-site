@@ -20,6 +20,7 @@ const handler: Handler = async (event) => {
   }
 
   console.log('🖼 IMAGE LENGTH:', imageBase64.length);
+  console.log("✅ Is valid base64?", imageBase64.startsWith('/9j/') || imageBase64.startsWith('iVBOR'));
 
   try {
     const prompt = `
@@ -60,26 +61,35 @@ The report must include the following structured sections. Each section should b
 
 Write in an academic tone using formal markdown structure with headings and subheadings.
 `;
-console.log('🧠 Using model:', 'gpt-4o');
-const response = await openai.chat.completions.create({
-  model: 'gpt-4o',
-  messages: [
-    {
-      role: 'user',
-      content: [
-        { type: 'text', text: prompt },
+
+    console.log('🧠 Using model:', 'gpt-4o');
+    console.log("📦 Sending to OpenAI:", {
+      hasKey: !!process.env.OPENAI_API_KEY,
+      model: 'gpt-4o',
+      imageLength: imageBase64.length,
+      isImagePayloadValid: imageBase64.startsWith('/9j/') || imageBase64.startsWith('iVBOR'),
+    });
+
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4o',
+      messages: [
         {
-          type: 'image_url',
-          image_url: {
-            url: `data:image/jpeg;base64,${imageBase64}`,
-          },
+          role: 'user',
+          content: [
+            { type: 'text', text: prompt },
+            {
+              type: 'image_url',
+              image_url: {
+                url: `data:image/jpeg;base64,${imageBase64}`,
+              },
+            },
+          ],
         },
       ],
-    },
-  ],
-  max_tokens: 2000,
-});
+      max_tokens: 2000,
+    });
 
+    console.log("📝 OpenAI raw response:", response.choices?.[0]?.message?.content || 'No content');
 
     const result = response.choices?.[0]?.message?.content || 'No result.';
     return {
