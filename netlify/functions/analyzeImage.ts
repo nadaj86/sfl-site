@@ -89,9 +89,9 @@ Write in an academic tone using formal markdown structure with headings and subh
       max_tokens: 2000,
     });
 
-    console.log("📝 OpenAI raw response:", response.choices?.[0]?.message?.content || 'No content');
-
     const result = response.choices?.[0]?.message?.content || 'No result.';
+    console.log("📝 OpenAI raw response:", result);
+
     return {
       statusCode: 200,
       body: JSON.stringify({ analysis: result }),

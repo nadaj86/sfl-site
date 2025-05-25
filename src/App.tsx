@@ -1,3 +1,5 @@
+// src/App.tsx
+import Contact from './pages/Contact';
 import { useEffect, useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import OpenAI from 'openai';
@@ -14,23 +16,26 @@ function App() {
     <div style={{ padding: '2rem' }}>
       <header style={{ display: 'flex', alignItems: 'center', marginBottom: '2rem' }}>
         <img src={logo} alt="Logo" style={{ height: '50px', marginRight: '1rem' }} />
-        <h1 style={{ margin: 0, fontSize: '1.5rem' }}>by Nada AlJamal</h1>
+        <h1 style={{ margin: 0, fontSize: '0.95rem' }}>©2025 Nada AlJamal</h1>
       </header>
 
       <nav style={{ marginBottom: '2rem' }}>
         <Link to="/" style={{ marginRight: '1rem' }}>Home</Link>
         <Link to="/text-framework" style={{ marginRight: '1rem' }}>Text Analysis Framework</Link>
+        <Link to="/text-analysis" style={{ marginRight: '1rem' }}>Text Tool</Link>
         <Link to="/image-framework" style={{ marginRight: '1rem' }}>Image Analysis Framework</Link>
         <Link to="/image-analysis" style={{ marginRight: '1rem' }}>Image Tool</Link>
-        <Link to="/text-analysis">Text Tool</Link>
+        <Link to="/contact" style={{ marginRight: '1rem' }}>Contact</Link>
       </nav>
 
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/text-framework" element={<TextFramework />} />
+        <Route path="/text-analysis" element={<TextTool />} />
         <Route path="/image-framework" element={<ImageFramework />} />
         <Route path="/image-analysis" element={<ImageTool />} />
-        <Route path="/text-analysis" element={<TextTool />} />
+        <Route path="/contact" element={<Contact />} />
+
       </Routes>
     </div>
   );
@@ -68,6 +73,7 @@ function ImageTool() {
   const [preview, setPreview] = useState<string | null>(null);
   const [analysis, setAnalysis] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -75,12 +81,14 @@ function ImageTool() {
       setImage(file);
       setPreview(URL.createObjectURL(file));
       setAnalysis(null);
+      setError(null);
     }
   }
 
   async function handleSubmit() {
     if (!image) return alert('Please upload an image first.');
     setLoading(true);
+    setError(null);
 
     const reader = new FileReader();
     reader.readAsDataURL(image);
@@ -92,10 +100,11 @@ function ImageTool() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ imageBase64: base64 }),
         });
+
         const data = await response.json();
-        setAnalysis(data.analysis);
-      } catch {
-        alert('Something went wrong');
+        setAnalysis(data.analysis || 'No result from OpenAI.');
+      } catch (err: any) {
+        setError('Something went wrong while analyzing the image.');
       } finally {
         setLoading(false);
       }
@@ -108,8 +117,10 @@ function ImageTool() {
       <input type="file" accept="image/*" onChange={handleFileChange} />
       {preview && <img src={preview} alt="Preview" style={{ maxWidth: '300px', marginTop: '1rem' }} />}
       <br />
-      <button onClick={handleSubmit} style={{ marginTop: '1rem' }}>Analyze Image</button>
-      {loading && <p>Analyzing...</p>}
+      <button onClick={handleSubmit} disabled={loading} style={{ marginTop: '1rem' }}>
+        {loading ? 'Analyzing...' : 'Analyze Image'}
+      </button>
+      {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}
       {analysis && (
         <div style={{ marginTop: '1rem' }}>
           <h3>Analysis Result:</h3>
