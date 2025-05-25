@@ -19,11 +19,11 @@ function Contact() {
 
   return (
     <div style={{ maxWidth: '600px', margin: 'auto', padding: '2rem' }}>
-      <h1>Contact the Author</h1>
+      <h1>Contact Us</h1>
       <p>If you have any questions or feedback, feel free to get in touch!</p>
 
       <p><strong>Name:</strong> Nada AlJamal</p>
-      <p><strong>Email:</strong> nada@example.com</p>
+      <p><strong>Email:</strong> aljamalnh@gmail.com</p>
 
       <form onSubmit={handleSubmit} style={{ marginTop: '2rem' }}>
         <label>Name</label><br />
