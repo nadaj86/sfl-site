@@ -11,10 +11,22 @@ function Contact() {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const res = await fetch('/.netlify/functions/sendEmail', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    });
+    if (!res.ok) throw new Error('Failed to send');
+
     setSubmitted(true);
     setForm({ name: '', email: '', message: '' });
+  } catch (err) {
+    alert('Something went wrong sending the message.');
+  }
+};
   };
 
   return (
