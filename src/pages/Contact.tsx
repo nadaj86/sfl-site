@@ -8,7 +8,7 @@ function Contact() {
       <iframe
         src="https://docs.google.com/forms/d/e/1FAIpQLSf7lwBOj7TQC-0Xa2d4sI4_jzv271RgdcyeMuW6U0Fqq5fBxA/viewform?embedded=true"
         width="100%"
-        height="100%"
+        height="7000"
         frameBorder="0"
         marginHeight={0}
         marginWidth={0}
