@@ -95,7 +95,8 @@ function ImageTool() {
     reader.onloadend = async () => {
       const base64 = reader.result?.toString().split(',')[1];
       try {
-        const response = await fetch('/.netlify/functions/analyzeImage', {
+        const response = await fetch('/.netlify/functions-background/analyzeImage', {
+
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ imageBase64: base64 }),
